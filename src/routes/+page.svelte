@@ -175,10 +175,15 @@
 	}
 
 	textarea {
+		outline: none;
 		margin-top: 10px;
 		padding: 10px;
 		resize: none;
 		font-size: 20px;
+	}
+
+	textarea:focus {
+		outline: none;
 	}
 
 	.body {
