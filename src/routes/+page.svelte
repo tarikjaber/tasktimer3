@@ -36,7 +36,6 @@
 		textarea.focus();
 		document.title = "Task Timer";
 		tasks = [];
-		new Notification("clear all")
 		
 		playing = false;
 		if (intervalId) {
