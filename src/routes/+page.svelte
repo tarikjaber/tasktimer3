@@ -85,7 +85,7 @@
 			const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
 			timeLeft = tasks[currentTaskIndex]?.time - elapsedTime;
 			console.log(timeLeft);
-			document.title = timeString + " - " + tasks[currentTaskIndex]?.name;
+			document.title = timeString + " - " + taskToString(tasks[currentTaskIndex]);
 
 			if (timeLeft <= 0) {
 				failed = true;
