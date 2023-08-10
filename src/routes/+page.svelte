@@ -2,8 +2,17 @@
 	import { parseTasks } from "../utils";
 	import type { Task } from "../utils/types";
 	import { onMount } from "svelte";
+	import { toastStore, type ToastSettings, Toast } from '@skeletonlabs/skeleton';
 
-	import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+	const successToast: ToastSettings = {
+		message: 'Successfully completed task.',
+		background: 'variant-filled-success',
+	};
+
+	const failureToast: ToastSettings = {
+		message: 'Mission Failed. Did not complete task in time.',
+		background: 'variant-filled-error',
+	};
 
 	let playing = false;
 	let textarea: HTMLTextAreaElement;
@@ -14,20 +23,14 @@
 	let currentTaskIndex = 0;
 	let startTime: number;
 	$: timeString = (Math.floor(timeLeft / 60)).toString().padStart(2, '0') + ':' + (timeLeft % 60).toString().padStart(2, '0');
-
+	
 	onMount(() => {
 		document.title = "Task Timer";
 		textarea.focus();
 		if (!("Notification" in window)) {
 			alert("This browser does not support desktop notification");
-		} else if (Notification.permission === "granted") {
-			new Notification("Hi there!");
 		} else if (Notification.permission !== "denied") {
-			Notification.requestPermission().then((permission) => {
-				if (permission === "granted") {
-					new Notification("Hi there!");
-				}
-			})
+			Notification.requestPermission()
 		};
 	})
 
@@ -51,12 +54,16 @@
 	function onDone() {
 		console.log('on done')
 		currentTaskIndex++;
+		new Audio("success.m4a").play();
+		toastStore.trigger(successToast);
 		if (currentTaskIndex >= tasks.length) {
 			clearAll();
+			new Notification("Finished All Tasks!")
 			return;
 		}
-		const notificationMessage = taskToString(tasks[currentTaskIndex]) + " started.";
+		const notificationMessage = "\"" + taskToString(tasks[currentTaskIndex]) + "\" Started";
 		new Notification(notificationMessage);
+		console.log(notificationMessage)
 		startTime = Date.now();
 	}
 
@@ -90,6 +97,8 @@
 
 			if (timeLeft <= 0) {
 				failed = true;
+				toastStore.trigger(failureToast);
+				new Audio("failure.m4a").play();
 				new Notification("Mission Failed.")
 				clearAll();
 			}
@@ -103,8 +112,18 @@
 			return task.name;
 		}
 	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter' && event.shiftKey) {
+			event.preventDefault();
+			if (!playing) {
+				onStart();
+			}
+		}
+	}
 </script>
 
+<Toast />
 <div class="vertical">
 	<div class="body">
 		{#if playing}
@@ -118,7 +137,7 @@
 			{/if}
 			<h2 class="h2">00:00</h2>
 		{/if}
-		<textarea class="textarea" rows="16" placeholder="Enter tasks..." bind:this={textarea} />
+		<textarea class="textarea" rows="16" placeholder="Enter tasks..." bind:this={textarea} on:keydown={handleKeyDown} />
 		<div class="buttons">
 			<button type="button" on:click={onClear} class="btn btn-xl variant-filled-secondary">Clear</button>
 			{#if playing}
