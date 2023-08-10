@@ -4,7 +4,6 @@
 	import { onMount } from "svelte";
 	import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 
-	
 	let playing = false;
 	let textarea: HTMLTextAreaElement;
 	let intervalId: number;
@@ -35,6 +34,7 @@
 		textarea.focus();
 		document.title = "Task Timer";
 		tasks = [];
+		new Notification("clear all")
 		
 		playing = false;
 		if (intervalId) {
@@ -51,10 +51,11 @@
 		console.log('on done')
 		currentTaskIndex++;
 		if (currentTaskIndex >= tasks.length) {
-			console.log("running clear all")
 			clearAll();
 			return;
 		}
+		const notificationMessage = taskToString(tasks[currentTaskIndex]) + " started.";
+		new Notification(notificationMessage);
 		startTime = Date.now();
 	}
 
@@ -88,18 +89,25 @@
 
 			if (timeLeft <= 0) {
 				failed = true;
-				console.log("Mission failed")
 				new Notification("Mission Failed.")
 				clearAll();
 			}
 		}, 1000);
+	}
+
+	function taskToString(task: Task) {
+		if (task.repetitionCount > 1) {
+			return task.name + ' (' + task.index + ')';
+		} else {
+			return task.name;
+		}
 	}
 </script>
 
 <div class="vertical">
 	<div class="body">
 		{#if playing}
-			<h1 class="h1">{tasks[currentTaskIndex]?.name}</h1>
+			<h1 class="h1">{taskToString(tasks[currentTaskIndex])}</h1>
 			<h1 class="h2">{timeString}</h1>
 		{:else}
 			{#if failed}
