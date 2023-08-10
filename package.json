@@ -37,6 +37,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"canvas-confetti": "^1.6.0"
+		"canvas-confetti": "^1.6.0",
+		"party-js": "^2.2.0"
 	}
 }

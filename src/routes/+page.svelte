@@ -1,18 +1,17 @@
 <script lang="ts">
-	import { parseTasks } from "../utils";
-	import type { Task } from "../utils/types";
-	import { onMount } from "svelte";
+	import { parseTasks } from '../utils';
+	import type { Task } from '../utils/types';
+	import { onMount } from 'svelte';
 	import { toastStore, type ToastSettings, Toast } from '@skeletonlabs/skeleton';
-	import confetti from 'canvas-confetti';
 
 	const successToast: ToastSettings = {
 		message: 'Successfully completed task.',
-		background: 'variant-filled-success',
+		background: 'variant-filled-success'
 	};
 
 	const failureToast: ToastSettings = {
 		message: 'Mission Failed. Did not complete task in time.',
-		background: 'variant-filled-error',
+		background: 'variant-filled-error'
 	};
 
 	let playing = false;
@@ -23,24 +22,29 @@
 	let failed = false;
 	let currentTaskIndex = 0;
 	let startTime: number;
-	$: timeString = (Math.floor(timeLeft / 60)).toString().padStart(2, '0') + ':' + (timeLeft % 60).toString().padStart(2, '0');
-	
+	$: timeString =
+		Math.floor(timeLeft / 60)
+			.toString()
+			.padStart(2, '0') +
+		':' +
+		(timeLeft % 60).toString().padStart(2, '0');
+
 	onMount(() => {
-		document.title = "Task Timer";
+		document.title = 'Task Timer';
 		textarea.focus();
-		if (!("Notification" in window)) {
-			alert("This browser does not support desktop notification");
-		} else if (Notification.permission !== "denied") {
-			Notification.requestPermission()
-		};
-	})
+		if (!('Notification' in window)) {
+			alert('This browser does not support desktop notification');
+		} else if (Notification.permission !== 'denied') {
+			Notification.requestPermission();
+		}
+	});
 
 	function clearAll() {
 		textarea.value = '';
 		textarea.focus();
-		document.title = "Task Timer";
+		document.title = 'Task Timer';
 		tasks = [];
-		
+
 		playing = false;
 		if (intervalId) {
 			window.clearInterval(intervalId);
@@ -48,28 +52,29 @@
 	}
 
 	function onClear() {
-		console.log('on clear')
+		console.log('on clear');
 		clearAll();
 	}
 
 	function onDone() {
-		console.log('on done')
+		console.log('on done');
 		currentTaskIndex++;
-		new Audio("success.m4a").play();
+		new Audio('success.m4a').play();
 		toastStore.trigger(successToast);
+
 		if (currentTaskIndex >= tasks.length) {
 			clearAll();
-			new Notification("Finished All Tasks!")
+			new Notification('Finished All Tasks!');
 			return;
 		}
-		const notificationMessage = "\"" + taskToString(tasks[currentTaskIndex]) + "\" Started";
+		const notificationMessage = '"' + taskToString(tasks[currentTaskIndex]) + '" Started';
 		new Notification(notificationMessage);
-		console.log(notificationMessage)
+		console.log(notificationMessage);
 		startTime = Date.now();
 	}
 
-	function onStart() {	
-		console.log('on start')
+	function onStart() {
+		console.log('on start');
 		const tasksInputValue = textarea.value;
 		failed = false;
 		currentTaskIndex = 0;
@@ -90,17 +95,17 @@
 		startTime = Date.now();
 
 		intervalId = window.setInterval(() => {
-			console.log("interval called")
+			console.log('interval called');
 			const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
 			timeLeft = tasks[currentTaskIndex]?.time - elapsedTime;
 			console.log(timeLeft);
-			document.title = timeString + " - " + taskToString(tasks[currentTaskIndex]);
+			document.title = timeString + ' - ' + taskToString(tasks[currentTaskIndex]);
 
 			if (timeLeft <= 0) {
 				failed = true;
 				toastStore.trigger(failureToast);
-				new Audio("failure.m4a").play();
-				new Notification("Mission Failed.")
+				new Audio('failure.m4a').play();
+				new Notification('Mission Failed.');
 				clearAll();
 			}
 		}, 1000);
@@ -126,7 +131,7 @@
 
 <Toast />
 <div class="vertical">
-	<div class="body">
+	<div class="body" id="body">
 		{#if playing}
 			<h1 class="h1">{taskToString(tasks[currentTaskIndex])}</h1>
 			<h1 class="h2">{timeString}</h1>
@@ -138,13 +143,25 @@
 			{/if}
 			<h2 class="h2">00:00</h2>
 		{/if}
-		<textarea class="textarea" rows="16" placeholder="Enter tasks..." bind:this={textarea} on:keydown={handleKeyDown} />
+		<textarea
+			class="textarea"
+			rows="16"
+			placeholder="Enter tasks..."
+			bind:this={textarea}
+			on:keydown={handleKeyDown}
+		/>
 		<div class="buttons">
-			<button type="button" on:click={onClear} class="btn btn-xl variant-filled-secondary">Clear</button>
+			<button type="button" on:click={onClear} class="btn btn-xl variant-filled-secondary"
+				>Clear</button
+			>
 			{#if playing}
-				<button type="button" on:click={onDone} class="btn btn-xl variant-filled-tertiary">Done</button>
+				<button type="button" on:click={onDone} class="btn btn-xl variant-filled-tertiary"
+					>Done</button
+				>
 			{:else}
-				<button type="button" on:click={onStart} class="btn btn-xl variant-filled-primary">Start</button>
+				<button type="button" on:click={onStart} class="btn btn-xl variant-filled-primary"
+					>Start</button
+				>
 			{/if}
 		</div>
 	</div>
@@ -160,8 +177,8 @@
 
 	.h1 {
 		font-size: 70px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	.h2 {
@@ -200,5 +217,5 @@
 		gap: 10px;
 		justify-content: center;
 		margin-top: 10px;
-	}	
+	}
 </style>
