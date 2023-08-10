@@ -139,8 +139,6 @@
 
 	.h1 {
 		font-size: 70px;
-		line-height: 70px;
-		overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
 	}
