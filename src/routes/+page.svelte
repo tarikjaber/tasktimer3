@@ -14,23 +14,21 @@
 	$: timeString = (Math.floor(timeLeft / 60)).toString().padStart(2, '0') + ':' + (timeLeft % 60).toString().padStart(2, '0');
 
 	onMount(() => {
-		console.log("sending notification")
-		new Notification("amongus")
+		document.title = "Task Timer";
 		if (!("Notification" in window)) {
 			alert("This browser does not support desktop notification");
 		} else if (Notification.permission === "granted") {
-			const notification = new Notification("Hi there!");
+			new Notification("Hi there!");
 		} else if (Notification.permission !== "denied") {
 			Notification.requestPermission().then((permission) => {
 				if (permission === "granted") {
-					const notification = new Notification("Hi there!");
+					new Notification("Hi there!");
 				}
 			})
 		};
 	})
 
 	function clearAll() {
-
 		textarea.value = '';
 		textarea.focus();
 		tasks = [];

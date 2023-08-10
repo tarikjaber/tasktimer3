@@ -7,4 +7,7 @@
 	import '../app.postcss';
 </script>
 
+<svelte:head>
+	<title>Task Timer</title>
+</svelte:head>
 <slot />
