@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { parseTasks } from "../utils";
 	import type { Task } from "../utils/types";
+	import { onMount } from "svelte";
 	
 	let playing = false;
 	let textarea: HTMLTextAreaElement;
@@ -12,7 +13,24 @@
 	let startTime: number;
 	$: timeString = (Math.floor(timeLeft / 60)).toString().padStart(2, '0') + ':' + (timeLeft % 60).toString().padStart(2, '0');
 
+	onMount(() => {
+		console.log("sending notification")
+		new Notification("amongus")
+		if (!("Notification" in window)) {
+			alert("This browser does not support desktop notification");
+		} else if (Notification.permission === "granted") {
+			const notification = new Notification("Hi there!");
+		} else if (Notification.permission !== "denied") {
+			Notification.requestPermission().then((permission) => {
+				if (permission === "granted") {
+					const notification = new Notification("Hi there!");
+				}
+			})
+		};
+	})
+
 	function clearAll() {
+
 		textarea.value = '';
 		textarea.focus();
 		tasks = [];
@@ -68,6 +86,7 @@
 
 			if (timeLeft <= 0) {
 				failed = true;
+				new Notification("Mission Failed.")
 				clearAll();
 			}
 		}, 1000);
