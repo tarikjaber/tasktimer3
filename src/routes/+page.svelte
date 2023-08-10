@@ -2,6 +2,7 @@
 	import { parseTasks } from "../utils";
 	import type { Task } from "../utils/types";
 	import { onMount } from "svelte";
+
 	import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 
 	let playing = false;
@@ -16,6 +17,7 @@
 
 	onMount(() => {
 		document.title = "Task Timer";
+		textarea.focus();
 		if (!("Notification" in window)) {
 			alert("This browser does not support desktop notification");
 		} else if (Notification.permission === "granted") {
