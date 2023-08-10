@@ -3,6 +3,7 @@
 	import type { Task } from "../utils/types";
 	import { onMount } from "svelte";
 	import { toastStore, type ToastSettings, Toast } from '@skeletonlabs/skeleton';
+	import confetti from 'canvas-confetti';
 
 	const successToast: ToastSettings = {
 		message: 'Successfully completed task.',
