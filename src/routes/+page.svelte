@@ -2,6 +2,8 @@
 	import { parseTasks } from "../utils";
 	import type { Task } from "../utils/types";
 	import { onMount } from "svelte";
+	import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+
 	
 	let playing = false;
 	let textarea: HTMLTextAreaElement;
@@ -31,6 +33,7 @@
 	function clearAll() {
 		textarea.value = '';
 		textarea.focus();
+		document.title = "Task Timer";
 		tasks = [];
 		
 		playing = false;
@@ -81,9 +84,11 @@
 			const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
 			timeLeft = tasks[currentTaskIndex]?.time - elapsedTime;
 			console.log(timeLeft);
+			document.title = timeString + " - " + tasks[currentTaskIndex]?.name;
 
 			if (timeLeft <= 0) {
 				failed = true;
+				console.log("Mission failed")
 				new Notification("Mission Failed.")
 				clearAll();
 			}
@@ -126,10 +131,15 @@
 
 	.h1 {
 		font-size: 70px;
+		line-height: 70px;
+		overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
 	}
 
 	.h2 {
 		font-size: 50px;
+		line-height: 40px;
 	}
 
 	.h1,
