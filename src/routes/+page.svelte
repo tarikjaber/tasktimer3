@@ -175,17 +175,12 @@
 		align-items: center;
 	}
 
-	/* .h1 {
-		font-size: 70px;
+	.h1 {
 		white-space: nowrap;
+		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-
-	.h2 {
-		font-size: 50px;
-		line-height: 40px;
-	} */
-
+	
 	.h1,
 	.h2 {
 		text-align: center;
