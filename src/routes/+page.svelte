@@ -177,7 +177,10 @@
 
 	.h1 {
 		white-space: nowrap;
+		overflow-x: clip;
 		text-overflow: ellipsis;
+		max-width: 100%;
+		display: inline-block; /* This prevents the element from growing horizontally */
 	}
 
 	.h1,
