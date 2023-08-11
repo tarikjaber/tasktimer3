@@ -134,7 +134,7 @@
 	<div class="body" id="body">
 		{#if playing}
 			<h1 class="h1">{taskToString(tasks[currentTaskIndex])}</h1>
-			<h1 class="h2">{timeString}</h1>
+			<h2 class="h2">{timeString}</h2>
 		{:else}
 			{#if failed}
 				<h1 class="h1 text-red-600">Failed</h1>
@@ -176,14 +176,8 @@
 	}
 
 	.h1 {
-		font-size: 70px;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-	}
-
-	.h2 {
-		font-size: 50px;
-		line-height: 40px;
 	}
 
 	.h1,
@@ -194,7 +188,8 @@
 
 	textarea {
 		outline: none;
-		margin-top: 10px;
+		margin: 10px 20px;
+		width: calc(100% - 40px);
 		padding: 10px;
 		resize: none;
 		font-size: 20px;
