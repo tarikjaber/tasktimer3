@@ -67,9 +67,6 @@
 			new Notification('Finished All Tasks!');
 			return;
 		}
-		const notificationMessage = '"' + taskToString(tasks[currentTaskIndex]) + '" Started';
-		new Notification(notificationMessage);
-		console.log(notificationMessage);
 		startTime = Date.now();
 	}
 
