@@ -102,7 +102,7 @@
 				failed = true;
 				toastStore.trigger(failureToast);
 				new Audio('failure.m4a').play();
-				new Notification('Mission Failed.');
+				new Notification('Mission Failed');
 				clearAll();
 			}
 		}, 1000);
