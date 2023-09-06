@@ -167,6 +167,7 @@
 <style>
 	.vertical {
 		height: 100%;
+		overflow-y: auto;
 		display: flex;
 		margin: 0 !important;
 		align-items: center;
